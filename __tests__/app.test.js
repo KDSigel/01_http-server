@@ -52,4 +52,31 @@ describe('coffee CRUD API', () => {
     expect(res.body).toEqual(expect.arrayContaining([SukeQuto, SumatraMandheling]));
   });
 
+  it('edits a coffee entry', async () => {
+
+    const coffee = { name: 'Ethiopia Suke Quto', cost: 8, body: 'Medium' };
+    const newCoffee = { name: 'Ethiopia Suke Quto', cost: 9, body: 'Medium' };
+
+    const firstCoffee = await request(app).post('/coffee').send(coffee);
+    // need to get that id!!!
+
+    const res = await request(app).put(`/coffee/${firstCoffee.body.id}`).send(newCoffee);
+
+    expect(res.body).toEqual({ ...newCoffee, id: firstCoffee.body.id });
+  });
+
+  it('deletes a coffee entry', async () => {
+
+    // create a record 
+    const coffee = { name: 'Ethiopia Suke Quto', cost: 8, body: 'Medium' };
+    const coffeeToDelete = await request(app).post('/coffee').send(coffee);
+
+    // send that record's id to delete that record
+    await request(app).delete(`/coffee/${coffeeToDelete.body.id}`);
+    const res = await request(app).get(`/coffee/${coffeeToDelete.body.id}`);
+
+    // get that record (by it's id) and it should return nothing or null?
+    expect(res.body).toEqual(null);
+  });
+
 });
