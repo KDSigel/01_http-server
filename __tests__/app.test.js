@@ -23,4 +23,13 @@ describe('coffee CRUD API', () => {
     );
   });
 
+  it('creates a new coffee and returns it via POST', async () => {
+    const coffee = { name: 'Ethiopia Suke Quto', cost: 8, body: 'Medium' };
+    const res = await request(app).post('/coffee').send(coffee);
+
+    expect(res.body).toEqual({ ...coffee, id: expect.any(String) });
+  });
+
+  
+
 });
