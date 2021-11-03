@@ -23,6 +23,4 @@ describe('coffee CRUD API', () => {
     );
   });
 
-  // put tests here?
-
 });
