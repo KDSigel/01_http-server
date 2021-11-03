@@ -30,6 +30,26 @@ describe('coffee CRUD API', () => {
     expect(res.body).toEqual({ ...coffee, id: expect.any(String) });
   });
 
-  
+  it('gets a coffee by its id', async () => {
+    const coffee = { name: 'Ethiopia Suke Quto', cost: 8, body: 'Medium' };
+    const db = new SimpleDb(rootDir);
+    await db.save(coffee);
+
+    const res = await request(app).get(`/coffee/${coffee.id}`);
+
+    expect(res.body).toEqual(coffee);
+  });
+
+  it('gets all coffee when no id specified', async () => {
+    const SukeQuto = { name: 'Ethiopia Suke Quto', cost: 8, body: 'Medium' };
+    const SumatraMandheling = { name: 'Sumatra Mandheling', cost: 7.5, body: 'Medium' };
+
+    const db = new SimpleDb(rootDir);
+    Promise.all([db.save(SukeQuto), db.save(SumatraMandheling)]);
+
+    const res = await request(app).get('/coffee');
+
+    expect(res.body).toEqual(expect.arrayContaining([SukeQuto, SumatraMandheling]));
+  });
 
 });
